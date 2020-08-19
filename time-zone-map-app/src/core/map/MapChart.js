@@ -14,6 +14,8 @@ import { getTimezone } from 'countries-and-timezones';
 import allStates from "../../data/allstates.json";
 import topoJSON from "../../data/out_0.json"
 
+import Color from "color"
+
 import timezoneColors from "../../data/timezone_colors.json"
 
 let geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
@@ -54,6 +56,7 @@ const MapChart = ({ setTooltipContent }) => {
             let geoColor = "#D6D6D6"
             const tzid = geo.properties["tzid"]
             const timezoneInfo = getTimezone(tzid)
+
             if (timezoneInfo) {
               let utcStr = timezoneInfo.utcOffsetStr;
               console.log("yeeeee", utcStr)
@@ -63,6 +66,7 @@ const MapChart = ({ setTooltipContent }) => {
               }
             }
 
+            let hoverColor = Color(geoColor).darken(0.2)
 
             return (
               <Geography
@@ -74,7 +78,7 @@ const MapChart = ({ setTooltipContent }) => {
                     outline: "none"
                   },
                   hover: {
-                    fill: "#F53",
+                    fill: hoverColor,
                     outline: "none"
                   },
                   pressed: {
@@ -83,6 +87,7 @@ const MapChart = ({ setTooltipContent }) => {
                   }
                 }}
                 onMouseEnter={() => {
+                  console.log(geoColor)
                   const tzid = geo.properties["tzid"]
                   const timezoneInfo = getTimezone(tzid)
                   if (timezoneInfo) {
