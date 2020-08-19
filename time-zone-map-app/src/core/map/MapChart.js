@@ -14,6 +14,8 @@ import { getTimezone } from 'countries-and-timezones';
 import allStates from "../../data/allstates.json";
 import topoJSON from "../../data/out_0.json"
 
+import timezoneColors from "../../data/timezone_colors.json"
+
 let geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 geoUrl = "./"
 
@@ -49,18 +51,47 @@ const MapChart = ({ setTooltipContent }) => {
       <Geographies geography={topoJSON}>
         {({ geographies }) =>
           geographies.map(geo => {
+            let geoColor = "#D6D6D6"
+            const tzid = geo.properties["tzid"]
+            const timezoneInfo = getTimezone(tzid)
+            if (timezoneInfo) {
+              let utcStr = timezoneInfo.utcOffsetStr;
+              console.log("yeeeee", utcStr)
+              if (timezoneColors[utcStr]) {
+                console.log("yesz")
+                geoColor = timezoneColors[utcStr]
+              }
+            }
+
+
             return (
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                fill="#9998A3"
-                stroke="#EAEAEC"
-                strokeWidth="0.3px"
+                style={{
+                  default: {
+                    fill: geoColor,
+                    outline: "none"
+                  },
+                  hover: {
+                    fill: "#F53",
+                    outline: "none"
+                  },
+                  pressed: {
+                    fill: "#E42",
+                    outline: "none"
+                  }
+                }}
                 onMouseEnter={() => {
                   const tzid = geo.properties["tzid"]
                   const timezoneInfo = getTimezone(tzid)
-                  console.log(timezoneInfo)
-                  setTooltipContent(tzid);
+                  if (timezoneInfo) {
+                    const { utcOffsetStr } = timezoneInfo;
+                    setTooltipContent(`${tzid} - ${utcOffsetStr}`);
+                  } else {
+                    setTooltipContent(`${tzid} - No GMT Data`);
+
+                  }
                 }}
                 onMouseLeave={() => {
                   setTooltipContent("");
