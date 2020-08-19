@@ -6,20 +6,19 @@ import {
   Geography,
   Marker,
   Graticule,
-  Annotation
+  ZoomableGroup
 } from "react-simple-maps";
 
 import { getTimezone } from 'countries-and-timezones';
 
 import allStates from "../../data/allstates.json";
-import topoJSON from "../../data/out_0.json"
+import topoJSON from "../../data/out_2.json"
+// import topoJSON from "../../data/timezones-topo2.json"
 
 import Color from "color"
 
 import timezoneColors from "../../data/timezone_colors.json"
 
-let geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
-geoUrl = "./"
 
 const offsets = {
   VT: [50, -8],
@@ -44,11 +43,17 @@ const rounded = num => {
 };
 
 
-const MapChart = ({ setTooltipContent }) => {
+const MapChart = ({ setTooltipContent, markers }) => {
   return (
-    <ComposableMap data-tip="" projection="geoEqualEarth" projectionConfig={{
-      scale: 120
-    }}>
+    <ComposableMap data-tip=""
+      projection="geoEqualEarth"
+      height={window.innerHeight}
+      projectionConfig={{
+        scale: 120,
+        center: [0, -129]
+      }}>
+
+      {/* <ZoomableGroup zoom={1}> */}
       <Graticule stroke="#EAEAEC" />
       <Geographies geography={topoJSON}>
         {({ geographies }) =>
@@ -59,9 +64,7 @@ const MapChart = ({ setTooltipContent }) => {
 
             if (timezoneInfo) {
               let utcStr = timezoneInfo.utcOffsetStr;
-              console.log("yeeeee", utcStr)
               if (timezoneColors[utcStr]) {
-                console.log("yesz")
                 geoColor = timezoneColors[utcStr]
               }
             }
@@ -86,8 +89,8 @@ const MapChart = ({ setTooltipContent }) => {
                     outline: "none"
                   }
                 }}
-                onMouseEnter={() => {
-                  console.log(geoColor)
+                onMouseEnter={(e) => {
+                  console.log(geo.properties)
                   const tzid = geo.properties["tzid"]
                   const timezoneInfo = getTimezone(tzid)
                   if (timezoneInfo) {
@@ -106,6 +109,19 @@ const MapChart = ({ setTooltipContent }) => {
           })
         }
       </Geographies>
+      {markers.map(({ name, coordinates, markerOffset }) => (
+        <Marker key={name} coordinates={coordinates}>
+          <circle r={1} fill="#F00" stroke="#fff" strokeWidth={0.3} />
+          <text
+            textAnchor="middle"
+            y={markerOffset * 0}
+            style={{ fontFamily: "system-ui", fill: "#5D5A6D", fontSize: "3px" }}
+          >
+            {name}
+          </text>
+        </Marker>
+      ))}
+      {/* </ZoomableGroup> */}
     </ComposableMap>
   );
 };

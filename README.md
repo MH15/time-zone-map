@@ -7,4 +7,4 @@ Open a terminal in `time-zone-map-app` and run `npm install`. It's ok if it take
 
 ## Credits
 - [`timezone-boundary-builder`](https://github.com/evansiroky/timezone-boundary-builder)
-- 
+- http://techslides.com/time-zone-world-map-with-d3-and-topojson

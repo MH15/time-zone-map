@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
@@ -13,15 +13,17 @@
   }
 }
 
-.App-header {
+.Header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  position: fixed;
+  width: 100%;
 }
 
 .App-link {
@@ -35,4 +37,17 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.map-shell {
+  background: white;
+  width: 100%;
+  /* padding-top: 2vh; */
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.map-frame {
+  width: 100%;
+  height: 100%;
 }
